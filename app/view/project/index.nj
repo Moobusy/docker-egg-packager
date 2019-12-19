@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+<table border="1" cellpadding="10" cellspacing="0">
+    <tr>
+        <td>名称</td>
+        <td>git</td>
+        <td>构建时间</td>
+        <td>大小</td>
+        <td>操作</td>
+    </tr>
+    {% for name,project in projects %}
+        <tr>
+            <td>{{ name }}</td>
+            <td>{{ project.git }}</td>
+            <td>{{ project.info.ctime }}</td>
+            <td>{{ project.info.size }}</td>
+            <td><a href="javascript:;" data-name="{{ name }}" class="build">构建</a></td>
+        </tr>
+    {% endfor %}
+</table>
+<script>
+  $(function() {
+    $('.build')
+      .click(function() {
+        const name = $(this)
+          .data('name');
+        $.ajax({
+          method: 'POST',
+          url: '/build',
+          data: {
+            name
+          },
+          success: (res) => {
+            alert('正在构建，请稍后')
+            console.log(res.content.content);
+          }
+        });
+      });
+  });
+</script>
+</body>
+</html>
